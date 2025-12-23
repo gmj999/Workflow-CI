@@ -28,17 +28,22 @@ jobs:
           python-version: 3.12.7
           auto-activate-base: false
 
-      - name: Check Conda
-        run: conda --version
+      - name: Initialize Conda
+        run: |
+          source $CONDA/etc/profile.d/conda.sh
+          conda --version
 
       - name: Install MLflow
         run: pip install mlflow
 
       - name: Run mlflow project
-        run: mlflow run MLProject
+        run: |
+          source $CONDA/etc/profile.d/conda.sh
+          mlflow run MLProject
 
       - name: Get latest MLflow run id
         run: |
+          source $CONDA/etc/profile.d/conda.sh
           echo "RUN_ID=$(mlflow runs list --experiment-id 0 --order-by attributes.start_time DESC --max-results 1 | tail -n 1 | awk '{print $1}')" >> $GITHUB_ENV
 
       - name: Save MLflow artifacts to repository
@@ -55,7 +60,9 @@ jobs:
           git push
 
       - name: Build Docker Model
-        run: mlflow models build-docker -m runs:/${{ env.RUN_ID }}/model -n mlflow-loan-model
+        run: |
+          source $CONDA/etc/profile.d/conda.sh
+          mlflow models build-docker -m runs:/${{ env.RUN_ID }}/model -n mlflow-loan-model
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin

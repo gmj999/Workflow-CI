@@ -9,18 +9,14 @@ jobs:
   train-and-deploy:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash -l
-
     steps:
       - name: Set up job
         run: echo start
 
-      - name: Run actions/checkout@v3
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.12.7
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.12.7
@@ -36,7 +32,7 @@ jobs:
         run: conda --version
 
       - name: Install MLflow
-        run: pip install mlflow
+        run: pip install mlflow scikit-learn pandas docker
 
       - name: Run mlflow project
         run: mlflow run MLProject

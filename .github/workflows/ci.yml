@@ -26,13 +26,13 @@ jobs:
         with:
           auto-update-conda: true
           python-version: 3.12.7
-          activate-environment: base
+          auto-activate-base: false
 
       - name: Check Conda
         run: conda --version
 
       - name: Install MLflow
-        run: pip install mlflow scikit-learn pandas docker
+        run: pip install mlflow
 
       - name: Run mlflow project
         run: mlflow run MLProject

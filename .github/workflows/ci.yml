@@ -10,18 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up job
+      - name: Start job
         run: echo start
 
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.12.7
 
-      - name: Set up Miniconda
+      - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
@@ -34,17 +34,19 @@ jobs:
           conda --version
 
       - name: Install MLflow
-        run: pip install mlflow
+        run: |
+          source $CONDA/etc/profile.d/conda.sh
+          pip install mlflow
 
-      - name: Run mlflow project
+      - name: Run MLflow Project
         run: |
           source $CONDA/etc/profile.d/conda.sh
           mlflow run MLProject
 
-      - name: Get latest MLflow run id
+      - name: Read MLflow run id
         run: |
-          source $CONDA/etc/profile.d/conda.sh
-          echo "RUN_ID=$(mlflow runs list --experiment-id 0 --order-by attributes.start_time DESC --max-results 1 | tail -n 1 | awk '{print $1}')" >> $GITHUB_ENV
+          RUN_ID=$(cat MLProject/run_id.txt)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
       - name: Save MLflow artifacts to repository
         run: |
@@ -59,19 +61,19 @@ jobs:
           git commit -m "Add MLflow artifacts for run ${{ env.RUN_ID }}" || echo "No changes"
           git push
 
-      - name: Build Docker Model
+      - name: Build Docker image from MLflow model
         run: |
           source $CONDA/etc/profile.d/conda.sh
           mlflow models build-docker -m runs:/${{ env.RUN_ID }}/model -n mlflow-loan-model
 
-      - name: Log in to Docker Hub
+      - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      - name: Tag Docker Image
+      - name: Tag Docker image
         run: docker tag mlflow-loan-model ${{ secrets.DOCKERHUB_USERNAME }}/mlflow-loan-model:latest
 
-      - name: Push Docker Image
+      - name: Push Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mlflow-loan-model:latest
 
-      - name: Complete job
+      - name: End job
         run: echo done

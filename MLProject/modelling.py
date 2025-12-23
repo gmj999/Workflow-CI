@@ -25,3 +25,8 @@ acc = accuracy_score(y_test, y_pred)
 
 mlflow.log_metric("accuracy", acc)
 mlflow.sklearn.log_model(model, "model")
+
+run_id = mlflow.active_run().info.run_id
+
+with open("run_id.txt", "w") as f:
+    f.write(run_id)

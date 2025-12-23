@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-mlflow.sklearn.autolog()
+mlflow.sklearn.autolog(log_models=False)
 
 df = pd.read_csv("Loan_Eligibility_preprocessing.csv")
 
@@ -24,3 +24,4 @@ y_pred = model.predict(X_test)
 acc = accuracy_score(y_test, y_pred)
 
 mlflow.log_metric("accuracy", acc)
+mlflow.sklearn.log_model(model, "model")

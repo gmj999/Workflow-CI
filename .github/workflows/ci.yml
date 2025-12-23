@@ -50,6 +50,12 @@ jobs:
           RUN_ID=$(cat MLProject/run_id.txt)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
 
+      - name: Upload MLflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-artifacts-${{ env.RUN_ID }}
+          path: mlruns
+
       - name: Save MLflow artifacts to repository
         run: |
           mkdir -p ci_artifacts/${{ env.RUN_ID }}

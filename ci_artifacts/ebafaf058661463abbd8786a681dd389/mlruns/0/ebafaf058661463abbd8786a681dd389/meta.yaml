@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/ebafaf058661463abbd8786a681dd389/artifacts
+end_time: 1766496316800
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ebafaf058661463abbd8786a681dd389
+run_name: welcoming-finch-109
+run_uuid: ebafaf058661463abbd8786a681dd389
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766496314150
+status: 3
+tags: []
+user_id: runner

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/76f60f5d85754ac1af20d82d8fb45c26/artifacts
+end_time: 1766498022506
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 76f60f5d85754ac1af20d82d8fb45c26
+run_name: capricious-sloth-634
+run_uuid: 76f60f5d85754ac1af20d82d8fb45c26
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766498019674
+status: 3
+tags: []
+user_id: runner
